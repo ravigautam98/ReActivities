@@ -1,3 +1,4 @@
+using Applications.Activities.Queries;
 using Microsoft.EntityFrameworkCore;
 using Persistances.Entities;
 
@@ -24,6 +25,8 @@ namespace ReActivities
                           .AllowAnyHeader();
                 });
             });
+
+            builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivitiesList.Handler>());
 
             
 

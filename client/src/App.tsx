@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { Typography } from '@mui/material'
+import ButtonAppBar from './navbar'
 
 type Activity = {
     id: string
@@ -19,6 +21,8 @@ function App() {
 
     return (
         <>
+            <ButtonAppBar ></ButtonAppBar><>
+            <Typography> Hello, We are stating are activity now...</Typography>
             <h1>Activities List</h1>
             <ul>
                 {activities.map(activity => (
@@ -30,7 +34,7 @@ function App() {
                     </li>
                 ))}
             </ul>
-        </>
+        </></>
     )
 }
 

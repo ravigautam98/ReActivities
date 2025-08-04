@@ -1,4 +1,6 @@
-﻿using Domains.Models;
+﻿using Applications.Activities.Queries;
+using Domains.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Persistances.Entities;
 
@@ -8,18 +10,22 @@ namespace ReActivities.Controllers
     [ApiController]
     public class ActivityController : ControllerBase
     {
-        public readonly AppDbContext appDbContext;
+        private readonly AppDbContext appDbContext;
+        private readonly IMediator mediator;
 
-        public ActivityController(AppDbContext appDbContext)
+        public ActivityController(AppDbContext appDbContext, IMediator mediator)
         {
             this.appDbContext = appDbContext;
+            this.mediator = mediator;
         }
 
         [HttpGet]
-        public IActionResult getAllActivity()
+        public async Task<ActionResult<List<Activity>>> getAllActivity()
         {
-            var activities = appDbContext.Activities.ToList();
-            return Ok(activities);  
+            //var activities = appDbContext.Activities.ToList();
+            //return Ok(activities);
+            
+            return await mediator.Send(new GetActivitiesList.Query());
         }
 
         [HttpPost]
