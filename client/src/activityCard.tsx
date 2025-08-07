@@ -18,7 +18,7 @@ type Props = {
 
 export default function ActivityCard({ activity }: Props) {
     return (
-        <Card sx={{ marginBottom: 2, bgcolor: "azure", maxWidth : 400 }}>
+        <Card sx={{ marginBottom: 2, bgcolor: "azure"}}>
             <CardMedia
                 sx={{ height: 140 }}
                 image="https://via.placeholder.com/300x140" // Optional: Replace with actual image

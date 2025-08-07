@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import ButtonAppBar from './navbar'
 import ActivityCard from './activityCard'
+import Grid  from '@mui/material/Grid';
 
 type Activity = {
     id: string
@@ -12,26 +13,59 @@ type Activity = {
 }
 
 function App() {
-    const [activities, setActivities] = useState<Activity[]>([])
+    const [activities, setActivities] = useState<Activity[]>([]);
+    const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
 
     useEffect(() => {
-        fetch('https://localhost:7050/Activity') 
+        fetch('https://localhost:7050/Activity')
             .then(response => response.json())
             .then(data => setActivities(data))
-            .catch(err => console.error("Error fetching activities", err))
-    }, [])
+            .catch(err => console.error("Error fetching activities", err));
+    }, []);
 
     return (
         <>
             <ButtonAppBar />
-            <div style={{ padding : "1rem" }}>
-            <Typography variant="h4"> Hello, We are stating are activity now...</Typography>
-            <h1>Activities List</h1>
-                {activities.map((activity) => (<ActivityCard key={activity.id} activity={activity} />))}
-            </div>
+            <Box sx={{ padding: "1rem" }}>
+                <Typography variant="h4">Hello, We are starting our activity now...</Typography>
+                <Grid container spacing={2}>
+                    {/* Left: 7/12 for activity cards */}
+                    <Grid size={8}>
+                        {/*<Typography variant="h5">Activities List</Typography>*/}
+                        {activities.map((activity) => (
+                            <div key={activity.id} onClick={() => setSelectedActivity(activity)}>
+                                <ActivityCard activity={activity} />
+                            </div>
+                        ))}
+                    </Grid>
+
+                    {/* Right: 5/12 for details */}
+                    <Grid size={4}>
+                        {selectedActivity ? (
+                            <Box sx={{ bgcolor: "azure" ,padding: 2, borderRadius: 2 }}>
+                                <Typography variant="h6" sx={{ color: 'primary.main' }}>Activity Details</Typography>
+                                <Typography sx={{ color: 'text.primary' }}>
+                                    <strong>Title:</strong> {selectedActivity.title}
+                                </Typography>
+                                <Typography sx={{ color: 'green' }}>
+                                    <strong>Status:</strong> {selectedActivity.isCompleted ? "Done" : "Pending"}
+                                </Typography>
+                                <Typography sx={{ color: 'text.secondary' }}>
+                                    <strong>Id:</strong> {selectedActivity.id}
+                                </Typography>
+                            </Box>
+                        ) : (
+                            <Typography variant="body1" color="error">
+                                Click on a card to view activity details.
+                            </Typography>
+                        )}
+                    </Grid>
+                </Grid>
+            </Box>
         </>
-    )
+    );
 }
+
 
 export default App
 
