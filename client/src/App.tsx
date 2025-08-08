@@ -53,6 +53,9 @@ function App() {
                                 <Typography sx={{ color: 'text.secondary' }}>
                                     <strong>Id:</strong> {selectedActivity.id}
                                 </Typography>
+                                <Typography sx={{ color: 'text.secondary' }}>
+                                    <strong>Description:</strong> {selectedActivity.description}
+                                </Typography>
                             </Box>
                         ) : (
                             <Typography variant="body1" color="error">
