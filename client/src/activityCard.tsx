@@ -4,13 +4,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import type { Activity } from './types';
 
-type Activity = {
-    id: string;
-    title: string;
-    isCompleted: boolean; 
-    description: string;
-};
+
 
 type Props = {
     activity: Activity;

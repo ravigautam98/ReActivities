@@ -4,13 +4,10 @@ import ButtonAppBar from './navbar';
 import ActivityCard from './activityCard';
 import Grid from '@mui/material/Grid';
 import React, { useState } from 'react';
-
-type Activity = {
-    id: string;
-    title: string;
-    isCompleted: boolean;
-    description: string;
-};
+import type { Activity } from './types';
+import ActivityList from './ActivityLists';
+import ActivityDetails from './activityDetails';
+import NewActivityForm from './activityForm';
 
 export default function App() {
     const [showNewForm, setShowNewForm] = useState(false);
@@ -40,95 +37,27 @@ export default function App() {
 
     return (
         <>
-            <ButtonAppBar onNewActivity={handleNewActivityClick} />
+            <ButtonAppBar onNewActivity={() => setShowNewForm(true)} />
             <Box sx={{ padding: '1rem' }}>
                 <Typography variant="h4">Hello, We are starting our activity now...</Typography>
                 <Grid container spacing={2}>
                     {/* Left: 8/12 for activity cards */}
-                    <Grid size={8}>
-                        {activities.map((activity) => (
-                            <div key={activity.id} onClick={() => handleCardClick(activity)}>
-                                <ActivityCard activity={activity} />
-                            </div>
-                        ))}
-                    </Grid>
+                    <ActivityList activities={activities} onCardClick={setSelectedActivity} />
+                    
 
                     {/* Right: 4/12 for details */}
                     <Grid size={4}>
-                        {/*{selectedActivity ? (*/}
-                        {/*    <Box sx={{ bgcolor: 'azure', padding: 2, borderRadius: 2 }}>*/}
-                        {/*        <Typography variant="h6" sx={{ color: 'primary.main' }}>*/}
-                        {/*            Activity Details*/}
-                        {/*        </Typography>*/}
-                        {/*        <Typography sx={{ color: 'text.primary' }}>*/}
-                        {/*            <strong>Title:</strong> {selectedActivity.title}*/}
-                        {/*        </Typography>*/}
-                        {/*        <Typography sx={{ color: 'green' }}>*/}
-                        {/*            <strong>Status:</strong> {selectedActivity.isCompleted ? 'Done' : 'Pending'}*/}
-                        {/*        </Typography>*/}
-                        {/*        <Typography sx={{ color: 'text.secondary' }}>*/}
-                        {/*            <strong>Id:</strong> {selectedActivity.id}*/}
-                        {/*        </Typography>*/}
-                        {/*        <Typography sx={{ color: 'text.secondary' }}>*/}
-                        {/*            <strong>Description:</strong> {selectedActivity.description}*/}
-                        {/*        </Typography>*/}
-                        {/*    </Box>*/}
-                        {/*) : (*/}
-                        {/*    <Typography variant="body1" color="error">*/}
-                        {/*        Click on a card to view activity details.*/}
-                        {/*    </Typography>*/}
-                        {/*)}*/}
-
-                        { selectedActivity ? (
-                            <Box  sx={{
-                                background: 'linear-gradient(135deg, #e0f7fa 0%, #3399FF 100%)', padding: 2, borderRadius: 2 }}>
-                                        <Typography variant="h6" sx={{ color: 'primary.main' }}>
-                                            Activity Details
-                                        </Typography>
-                                        <Typography sx={{ color: 'text.primary' }}>
-                                            <strong>Title:</strong> {selectedActivity.title}
-                                        </Typography>
-                                        <Typography sx={{ color: 'green' }}>
-                                            <strong>Status:</strong> {selectedActivity.isCompleted ? 'Done' : 'Pending'}
-                                        </Typography>
-                                        <Typography sx={{ color: 'text.secondary' }}>
-                                            <strong>Id:</strong> {selectedActivity.id}
-                                        </Typography>
-                                        <Typography sx={{ color: 'text.secondary' }}>
-                                            <strong>Description:</strong> {selectedActivity.description}
-                                        </Typography>
-                            </Box>
-                                  )  : (
-                                <Typography variant="body1" color="error">
-                                    Click on a card to view activity details.
-                                </Typography>
-                            )}
-                            
-
-                        {showNewForm && (
-                            <Box sx={{
-                                background: 'linear-gradient(135deg, #e0f7fa 0%, #3399FF 100%)', padding: 2, borderRadius: 2 }}>
-                                <Typography variant="h6" sx={{ color: 'black' }}>Create New Activity</Typography>
-                                {/* Your form here */}
-                                <TextField fullWidth label="Title" sx={{ mb: 2 }} />
-                                <TextField fullWidth label="Description" multiline rows={3} sx={{ mb: 2 }} />
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <FormControlLabel
-                                        control={<Checkbox />}
-                                        label="Is Completed"
-                                        sx={{ color: 'black' }}
-                                    />
-                                    <Box sx={{ flexGrow: 1 }} /> {/* pushes button to the right */}
-                                    <Button variant="contained">Submit</Button>
-                                </Box>
-                            </Box>
-                        )}
+                        <ActivityDetails selectedActivity={selectedActivity} />
+                        {showNewForm && <NewActivityForm onSubmit={() => console.log("Submit clicked")} />}
                     </Grid>
                 </Grid>
             </Box>
         </>
     );
 }
+
+
+
 
 
 //<ul>
