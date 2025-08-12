@@ -1,13 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { Box, Button, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
-import ButtonAppBar from './navbar';
-import ActivityCard from './activityCard';
+import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import type { Activity } from './types';
 import ActivityList from './ActivityLists';
 import ActivityDetails from './activityDetails';
 import NewActivityForm from './activityForm';
+import ButtonAppBar from './navbar';
+import type { Activity } from './types';
 
 export default function App() {
     const [showNewForm, setShowNewForm] = useState(false);
@@ -27,13 +26,13 @@ export default function App() {
     if (error instanceof Error) return <Typography color="error">{error.message}</Typography>;
 
 
-    const handleNewActivityClick = () => {
-        setShowNewForm(true);
-    };
+    //const handleNewActivityClick = () => {
+    //    setShowNewForm(true);
+    //};
 
-    const handleCardClick = (activity: React.SetStateAction<Activity | null>) => {
-        setSelectedActivity(activity);
-    };
+    //const handleCardClick = (activity: React.SetStateAction<Activity | null>) => {
+    //    setSelectedActivity(activity);
+    //};
 
     return (
         <>
@@ -43,12 +42,15 @@ export default function App() {
                 <Grid container spacing={2}>
                     {/* Left: 8/12 for activity cards */}
                     <ActivityList activities={activities} onCardClick={setSelectedActivity} />
-                    
+
 
                     {/* Right: 4/12 for details */}
                     <Grid size={4}>
                         <ActivityDetails selectedActivity={selectedActivity} />
-                        {showNewForm && <NewActivityForm onSubmit={() => console.log("Submit clicked")} />}
+                        <Box sx={{ marginTop: 2 }}>
+                            {showNewForm && <NewActivityForm onSubmit={() => setShowNewForm(false)} />}
+                        </Box>
+
                     </Grid>
                 </Grid>
             </Box>
