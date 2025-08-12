@@ -18,7 +18,7 @@ type Props = {
 
 export default function ActivityCard({ activity }: Props) {
     return (
-        <Card sx={{ marginBottom: 2, bgcolor: "azure"}}>
+        <Card sx={{ marginBottom: 2, background: 'linear-gradient(135deg, #e0f7fa 0%, #3399FF 100%)'}}>
             <CardMedia
                 sx={{ height: 140 }}
                 image="https://via.placeholder.com/300x140" // Optional: Replace with actual image
