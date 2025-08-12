@@ -33,7 +33,7 @@ namespace ReActivities.Controllers
         {
             appDbContext.Activities.Add(activity);
             appDbContext.SaveChanges();
-            return Ok();
+            return Ok(activity);
         }
 
         [HttpPut]
