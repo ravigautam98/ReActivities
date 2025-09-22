@@ -92,8 +92,7 @@ export default function NewActivityForm({ onSubmit }: Props) {
                     variant="contained"
                     onClick={handleSubmit}
                     disabled={addActivityMutation.isPending}
-                    sx={{ bgcolor: "chocolate" }}
-                >
+                    sx={{ bgcolor: "chocolate" }}>
                     {addActivityMutation.isPending ? "Saving..." : "Submit"}
                 </Button>
             </Box>
