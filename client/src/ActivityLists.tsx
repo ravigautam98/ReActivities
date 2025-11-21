@@ -6,14 +6,16 @@ import { type Activity } from "./types";
 type ActivityListProps = {
     activities: Activity[];
     onCardClick: (activity: Activity) => void;
+    onEditClick: (activity: Activity) => void; 
+    
 };
 
-export default function ActivityList({ activities, onCardClick }: ActivityListProps) {
+export default function ActivityList({ activities, onCardClick, onEditClick }: ActivityListProps) {
     return (
         <Grid size={8}>
             {activities.map((activity) => (
                 <div key={activity.id} onClick={() => onCardClick(activity)}>
-                    <ActivityCard activity={activity} />
+                    <ActivityCard activity={activity} EditActivity={(act) => onEditClick(act)}  />
                 </div>
             ))}
         </Grid>

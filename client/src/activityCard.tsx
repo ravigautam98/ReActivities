@@ -10,9 +10,13 @@ import type { Activity } from './types';
 
 type Props = {
     activity: Activity;
+    EditActivity: (activity: Activity) => void;
 };
 
-export default function ActivityCard({ activity }: Props) {
+export default function ActivityCard({ activity, EditActivity }: Props) {
+
+    //const handleEdit
+
     return (
         <Card sx={{ marginBottom: 2, background: 'linear-gradient(135deg, #e0f7fa 0%, #3399FF 100%)'}}>
             <CardMedia
@@ -32,7 +36,11 @@ export default function ActivityCard({ activity }: Props) {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Share</Button>
+                <Button size="small" onClick={(e) => {
+                    e.stopPropagation(); 
+                    console.log("Edit clicked:", activity);
+                    EditActivity(activity);
+                }}>Edit</Button>
                 <Button size="small">Learn More</Button>
             </CardActions>
         </Card>

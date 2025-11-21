@@ -3,13 +3,21 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { Activity } from "./types";
 
-type Props = { onSubmit: () => void };
+import { useEffect } from "react";
+
+type Props = {
+    onSubmit: () => void;
+    selectedActivity?: Activity | null;
+};
+
 
 function generateGuid() {
     return crypto.randomUUID(); // works in modern browsers
 }
 
-export default function NewActivityForm({ onSubmit }: Props) {
+
+export default function NewActivityForm({ onSubmit, selectedActivity }: Props) {
+
     const queryClient = useQueryClient();
 
     const addActivityMutation = useMutation({
@@ -29,21 +37,52 @@ export default function NewActivityForm({ onSubmit }: Props) {
         },
     });
 
+    const editActivityMutation = useMutation({
+        mutationFn: async (updated: Activity) => {
+            const res = await fetch("https://localhost:7050/Activity", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updated),
+            });
+            if (!res.ok) throw new Error("Update failed");
+            return res.json();
+        },
+        onSuccess: (data) => {
+            queryClient.setQueryData<Activity[]>(["activities"], (old = []) =>
+                old.map(a => a.id === data.id ? data : a)
+            );
+            onSubmit();
+        }
+    });
+
+
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [isCompleted, setIsCompleted] = useState(false);
 
+    useEffect(() => {
+        if (selectedActivity) {
+            setTitle(selectedActivity.title);
+            setDescription(selectedActivity.description);
+            setIsCompleted(selectedActivity.isCompleted);
+        }
+    }, [selectedActivity]);
+
     const handleSubmit = () => {
-        const newActivity: Activity = {
-            id: generateGuid(),
+        const activity: Activity = {
+            id: selectedActivity?.id ?? generateGuid(),
             title,
             description,
             isCompleted,
         };
 
-        addActivityMutation.mutate(newActivity);
+        if (selectedActivity) {
+            editActivityMutation.mutate(activity);
+        } else {
+            addActivityMutation.mutate(activity);
+        }
 
-        // Reset form
         setTitle("");
         setDescription("");
         setIsCompleted(false);

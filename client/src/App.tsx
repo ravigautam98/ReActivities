@@ -11,6 +11,7 @@ import type { Activity } from './types';
 export default function App() {
     const [showNewForm, setShowNewForm] = useState(false);
     const [selectedActivity, setSelectedActivity] = React.useState<Activity | null>(null);
+    const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
 
     //Fetching data using axios and react query
     const { data: activities = [], isLoading, error } = useQuery<Activity[]>({
@@ -41,14 +42,24 @@ export default function App() {
                 <Typography variant="h4">Hello, We are starting our activity now...</Typography>
                 <Grid container spacing={2}>
                     {/* Left: 8/12 for activity cards */}
-                    <ActivityList activities={activities} onCardClick={setSelectedActivity} />
+                    <ActivityList
+                        activities={activities}
+                        onCardClick={setSelectedActivity}             // click card -> show details
+                        onEditClick={(activity) => {                  // click edit -> open form
+                            setEditingActivity(activity);
+                            setShowNewForm(true);
+                        }}
+                    />
 
 
                     {/* Right: 4/12 for details */}
                     <Grid size={4}>
-                        <ActivityDetails selectedActivity={selectedActivity} />
+                        <ActivityDetails selectedActivity={selectedActivity} EditActivity={(activity) => {
+                            setEditingActivity(activity);
+                            setShowNewForm(true);
+                        }} />
                         <Box sx={{ marginTop: 2 }}>
-                            {showNewForm && <NewActivityForm onSubmit={() => setShowNewForm(false)} />}
+                            {showNewForm && <NewActivityForm onSubmit={() => setShowNewForm(false)} selectedActivity={editingActivity} />}
                         </Box>
 
                     </Grid>

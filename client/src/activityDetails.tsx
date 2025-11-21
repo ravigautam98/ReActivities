@@ -1,9 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import type { Activity } from "./types";
 
-type Props = { selectedActivity: Activity | null };
+type Props = {
+    selectedActivity: Activity | null;
+    EditActivity: (activity: Activity) => void;
+};
 
-export default function ActivityDetails({ selectedActivity }: Props) {
+export default function ActivityDetails({ selectedActivity, EditActivity }: Props) {
     if (!selectedActivity) {
         return (
             <Typography variant="body1" color="error">
