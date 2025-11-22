@@ -29,11 +29,32 @@ namespace ReActivities.Controllers
         }
 
         [HttpPost]
-        public IActionResult addActivity(Activity activity)
+        public IActionResult addActivity([FromBody]Activity activity)
         {
-            appDbContext.Activities.Add(activity);
-            appDbContext.SaveChanges();
-            return Ok(activity);
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+        .SelectMany(v => v.Errors)
+        .Select(e => e.ErrorMessage)
+        .ToList();
+
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Validation failed",
+                    errors
+                });
+            }
+            try
+            {
+                appDbContext.Activities.Add(activity);
+                appDbContext.SaveChanges();
+                return Ok(activity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while saving activity", error = ex.Message });
+            }
         }
 
         [HttpPut]
@@ -52,17 +73,18 @@ namespace ReActivities.Controllers
             return Ok(activity);
         }
 
-        [HttpDelete]
-        public async Task< IActionResult> deleteActivity(Activity deleteActivity)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteActivity(string id)
         {
-            var activity = await appDbContext.Activities.FindAsync(deleteActivity.Id);
+            var activity = await appDbContext.Activities.FindAsync(id);
 
-            if (activity is null) { return NotFound(); }
+            if (activity == null)
+                return NotFound(new { message = "Activity not found" });
 
             appDbContext.Activities.Remove(activity);
+            await appDbContext.SaveChangesAsync();
 
-            appDbContext.SaveChanges();
-            return Ok(activity);
+            return Ok(new { message = "Activity deleted", data = activity });
         }
     }
 }
